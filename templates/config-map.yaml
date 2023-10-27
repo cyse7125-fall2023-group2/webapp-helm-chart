@@ -5,5 +5,6 @@ metadata:
 data:
 {{- if .Values.configMap.enabled }}
   flyway.conf: |
+    flyway.url=jdbc:postgresql://{{ .Release.Name }}-postgresql-0.{{ .Release.Name }}-postgresql-hl.{{ .Release.Namespace }}.svc.cluster.local/app
 {{ .Values.configMap.data.flyway | nindent 4 }}
 {{- end }}
