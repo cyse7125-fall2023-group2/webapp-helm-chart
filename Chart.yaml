@@ -2,6 +2,10 @@ apiVersion: v2
 name: csye7125-chart
 description: A Helm chart for Kubernetes
 
+dependencies:
+  - name: postgresql
+    version: 13.1.5 # Specify the version you want to use
+    repository: https://github.com/bitnami/charts/tree/main/bitnami/postgresql
 # A chart can be either an 'application' or a 'library' chart.
 #
 # Application charts are a collection of templates that can be packaged into versioned archives
