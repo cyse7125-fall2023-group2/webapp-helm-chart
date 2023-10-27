@@ -27,6 +27,10 @@ primaryContainer:
       port: 4000
     initialDelaySeconds: 10
     periodSeconds: 20
+  volumeMounts:
+    - name: secret-volume
+      mountPath: /flyway/db_password.txt
+      subPath: db_password.txt
 
 initContainer:
   enabled: true
@@ -52,17 +56,16 @@ configMap:
   enabled: true
   data:
     flyway: |
-      flyway.url=jdbc:postgresql://host.docker.internal:5432/app
+      flyway.url=jdbc:postgresql://webapp-postgresql.default.svc.cluster.local:5432/app
       flyway.user=postgres
-      flyway.password=/flyway/db_password.txt
+      flyway.password=postgres
       flyway.baselineOnMigrate=false
 
 # Secrets settings
 secrets:
   enabled: true
   data:
-    db_password.txt: cGFzc3dvcmQ= 
-    DB_PASSWORD: cGFzc3dvcmQ=
+    DB_PASSWORD: cG9zdGdyZXM=
 
 env:
   - name: DB_USERNAME
@@ -70,31 +73,18 @@ env:
   - name: DB_NAME
     value: "app"
   - name: DB_HOST
-    value: "host.docker.internal"
+    value: "webapp-postgresql.default.svc.cluster.local"
   - name: DB_PORT
     value: "5432"
   - name: APP_PORT
     value: "4000"
-# env:
-#   DB_USERNAME: ""
-#   DB_PASSWORD: ""
-#   DB_NAME: ""
-#   DB_HOST: ""
-#   DB_PORT: ""
-#   APP_PORT: ""
+
 postgresql:
     auth:
-      postgresPassword: "password"
+      postgresPassword: "postgres"
       username: "postgres"
       password: "postgres"
       database: "app"
-      # existingSecret: ""
-      # secretKeys:
-      #   adminPasswordKey: ""
-      #   userPasswordKey: ""
-      #   replicationPasswordKey: ""
-    ## @param global.postgresql.service.ports.postgresql PostgreSQL service port (overrides `service.ports.postgresql`)
-    ##
     service:
       ports:
         postgresql: "5432"

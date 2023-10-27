@@ -38,6 +38,14 @@ spec:
 
           ports:
             - containerPort: {{ .Values.primaryContainer.ports.containerPort }}
+          volumeMounts:
+          {{- range .Values.initContainer.volumeMounts }}
+            - name: {{ .name }}
+              mountPath: {{ .mountPath }}
+              {{- if .subPath }}
+              subPath: {{ .subPath }}
+              {{- end }}
+          {{- end }}
           readinessProbe:
             httpGet:
               path: {{ .Values.primaryContainer.readinessProbe.httpGet.path }}
