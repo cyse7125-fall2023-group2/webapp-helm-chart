@@ -3,7 +3,7 @@ kind: Deployment
 metadata:
    name: csye7125
    labels:
-     "app" : "webapp"
+     app : webapp
 spec:
   replicas: {{ .Values.deployment.replicas }}
   strategy:
@@ -15,7 +15,7 @@ spec:
   progressDeadlineSeconds: {{ .Values.deployment.progressDeadlineSeconds }}
   selector:
     matchLabels:
-      app: "webapp"
+      app: webapp
   template:
       metadata:
        labels:
