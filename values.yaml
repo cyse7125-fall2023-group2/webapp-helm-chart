@@ -56,7 +56,7 @@ configMap:
   enabled: true
   data:
     flyway: |
-      flyway.url=jdbc:postgresql://webapp-postgresql.default.svc.cluster.local:5432/app
+      
       flyway.user=postgres
       flyway.password=postgres
       flyway.baselineOnMigrate=false
@@ -68,12 +68,12 @@ secrets:
     DB_PASSWORD: cG9zdGdyZXM=
 
 env:
-  - name: DB_USERNAME
-    value: "postgres"
+  # - name: DB_USERNAME
+  #   value: "postgres"
   - name: DB_NAME
     value: "app"
-  - name: DB_HOST
-    value: "webapp-postgresql.default.svc.cluster.local"
+  # - name: DB_HOST
+  #   value: "webapp-postgresql.default.svc.cluster.local"
   - name: DB_PORT
     value: "5432"
   - name: APP_PORT
