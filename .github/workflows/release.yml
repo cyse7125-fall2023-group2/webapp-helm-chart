@@ -1,9 +1,9 @@
 name: Helm CI
 
 on:
-  push:
+  pull_request:
     branches:
-      - main  # Adjust the branch name as needed
+      - main
 
 jobs:
   lint-test:
@@ -17,6 +17,9 @@ jobs:
         uses: azure/setup-helm@v1
         with:
           version: 'latest'
+
+      - name: test
+        run: ls
 
       - name: Lint Helm Chart
         run: helm lint .
