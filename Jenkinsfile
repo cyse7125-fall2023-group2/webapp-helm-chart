@@ -46,24 +46,6 @@ ipeline {
         //     }
         // }
 
-        // stage('Create GitHub Release') {
-        //     steps {
-        //         script {
-        //             def chartName = sh(script: 'basename path/to/your/chart', returnStatus: true).trim()
-        //             def zipFileName = "${chartName}-${newVersion}.tgz"
-
-        //             // Create GitHub release using GitHub API
-        //             sh "github-release create myorg/myrepo ${newVersion} -t ${zipFileName}"
-        //         }
-        //     }
-        // }
-    }
-
-    // post {
-    //     always {
-    //         // Clean up or post-processing steps
-    //     }
-    // }
 
 
 }
