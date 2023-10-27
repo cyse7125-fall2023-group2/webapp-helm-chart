@@ -12,21 +12,10 @@ type: application
 version: 0.1.0
 appVersion: "1.16.0"
 
-# Add custom annotations to store team members' information and GitHub links
-annotations:
-  teamMembers:
+maintainers: 
     - name: "Ankit Lall"
       github: "https://github.com/AnkitLall"
     - name: "Shikha Singh"
       github: "https://github.com/shikha-commits"
-    - name: "Sai Sumanth Kammal Shetty "
+    - name: "Sai Sumanth Kammal Shetty"
       github: "https://github.com/kammalshettys"
-    # Add more team members as needed
-
-# You can also use labels to store metadata
-labels:
-  teamMembers:
-    "Team Member 1": "https://github.com/AnkitLall"
-    "Team Member 2": "https://github.com/kammalshettys"
-    "Team Member 3": "https://github.com/shikha-commits"
-    # Add more team members as needed

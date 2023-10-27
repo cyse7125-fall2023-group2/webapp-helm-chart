@@ -1,28 +1,23 @@
-{{- if .Values.service.enabled }}
-  Your application has been deployed successfully!
+Please wait a few seconds until the {{ .Chart.Name }} chart is fully installed.
 
-  To access your application, follow these steps:
+user@debian:~$ helm install chart_name webapp-helm-chart-github-version.tar.gz
+NAME: chart_Name
+LAST DEPLOYED: time
+NAMESPACE: default
+STATUS: deployed
+REVISION: 1
+TEST SUITE: None
+NOTES:
 
-  1. Wait for the application to become available. This may take a few moments.
+After installation is complete, you can access your kubernetes resources by running this command:
+Webapp_pods:
+    kubectl get --namespace {{ .Release.Namespace }} pod {{ .Release.Name }}-webapp
+Services:
+    kubectl get --namespace {{ .Release.Namespace }} svc {{ .Release.Name }}-webapp-service
+StatefulSets:
+    kubectl get --namespace {{ .Release.Namespace }} pod {{ .Release.Name }}-postgres-0
 
-  {{- if .Values.service.type | default "ClusterIP" | eq "LoadBalancer" }}
-  2. If you are using a LoadBalancer service, wait for the external IP to be assigned:
-     export SERVICE_IP=$(kubectl get svc --namespace {{ .Release.Namespace }} {{ template "fullname" . }} -o jsonpath='{.status.loadBalancer.ingress[0].ip}')
-     echo "External IP: $SERVICE_IP"
-  {{- else }}
-  2. If you are using a ClusterIP service, you can access your application inside your cluster. Run these commands to port forward:
-     export POD_NAME=$(kubectl get pods --namespace {{ .Release.Namespace }} -l "app.kubernetes.io/name={{ template "fullname" . }},app.kubernetes.io/instance={{ .Release.Name }}" -o jsonpath="{.items[0].metadata.name}")
-     kubectl port-forward $POD_NAME 8080:{{ .Values.primaryContainer.ports.containerPort }}
-  3. Access your application at http://EXTERNAL_IP:8080
-  {{- end }}
+Please wait a few seconds until the webapp_chart is fully installed.
 
-  {{- if .Values.initContainer.enabled }}
-  4. If you have enabled the Flyway init container, database migration will occur during application startup. Please wait for this process to complete.
-  {{- end }}
-{{- else }}
-  Your application has been deployed successfully!
-
-  {{- if .Values.initContainer.enabled }}
-  Database migration with Flyway is enabled. Please wait for the migration process to complete.
-  {{- end }}
-{{- end }}
+and then entering the external IP address you get, into your web browser's address bar.
+http://EXTERNAL_IP:8080/api_endpoint
