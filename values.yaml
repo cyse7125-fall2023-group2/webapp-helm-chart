@@ -2,10 +2,26 @@ replicaCount: 3
 image:
   repository: sumanthksai/group-csye7125
   tag: 1.3.0
-env:
-  DB_USERNAME: ""
-  DB_PASSWORD: ""
-  DB_NAME: ""
-  DB_HOST: ""
-  DB_PORT: ""
-  APP_PORT: ""
+# env:
+#   DB_USERNAME: ""
+#   DB_PASSWORD: ""
+#   DB_NAME: ""
+#   DB_HOST: ""
+#   DB_PORT: ""
+#   APP_PORT: ""
+postgresql:
+    auth:
+      postgresPassword: "password"
+      username: "postgres"
+      password: "postgres"
+      database: "app"
+      # existingSecret: ""
+      # secretKeys:
+      #   adminPasswordKey: ""
+      #   userPasswordKey: ""
+      #   replicationPasswordKey: ""
+    ## @param global.postgresql.service.ports.postgresql PostgreSQL service port (overrides `service.ports.postgresql`)
+    ##
+    service:
+      ports:
+        postgresql: "5432"
