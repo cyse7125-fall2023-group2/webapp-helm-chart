@@ -88,3 +88,15 @@ postgresql:
     service:
       ports:
         postgresql: "5432"
+
+lint:
+  rules:
+    - name: missing-templates
+      pattern: ".+"
+      template: ".+"
+      template-to-render: ".+"
+      ignore: ".+"
+    - name: unknown-function
+      pattern: ".+"
+      function: lookup
+      ignore: true
