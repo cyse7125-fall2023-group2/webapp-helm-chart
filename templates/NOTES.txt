@@ -1,0 +1,28 @@
+{{- if .Values.service.enabled }}
+  Your application has been deployed successfully!
+
+  To access your application, follow these steps:
+
+  1. Wait for the application to become available. This may take a few moments.
+
+  {{- if .Values.service.type | default "ClusterIP" | eq "LoadBalancer" }}
+  2. If you are using a LoadBalancer service, wait for the external IP to be assigned:
+     export SERVICE_IP=$(kubectl get svc --namespace {{ .Release.Namespace }} {{ template "fullname" . }} -o jsonpath='{.status.loadBalancer.ingress[0].ip}')
+     echo "External IP: $SERVICE_IP"
+  {{- else }}
+  2. If you are using a ClusterIP service, you can access your application inside your cluster. Run these commands to port forward:
+     export POD_NAME=$(kubectl get pods --namespace {{ .Release.Namespace }} -l "app.kubernetes.io/name={{ template "fullname" . }},app.kubernetes.io/instance={{ .Release.Name }}" -o jsonpath="{.items[0].metadata.name}")
+     kubectl port-forward $POD_NAME 8080:{{ .Values.primaryContainer.ports.containerPort }}
+  3. Access your application at http://EXTERNAL_IP:8080
+  {{- end }}
+
+  {{- if .Values.initContainer.enabled }}
+  4. If you have enabled the Flyway init container, database migration will occur during application startup. Please wait for this process to complete.
+  {{- end }}
+{{- else }}
+  Your application has been deployed successfully!
+
+  {{- if .Values.initContainer.enabled }}
+  Database migration with Flyway is enabled. Please wait for the migration process to complete.
+  {{- end }}
+{{- end }}
