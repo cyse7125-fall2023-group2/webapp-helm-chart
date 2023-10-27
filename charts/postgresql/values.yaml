@@ -1603,3 +1603,15 @@ metrics:
     ##       summary: PostgreSQL replication is lagging by {{ "{{ $value }}" }} hour(s).
     ##
     rules: []
+
+    lint:
+      rules:
+        - name: missing-templates
+          pattern: ".+"
+          template: ".+"
+          template-to-render: ".+"
+          ignore: ".+"
+        - name: unknown-function
+          pattern: ".+"
+          function: lookup
+          ignore: true
