@@ -19,17 +19,33 @@ ipeline {
                 """
             }
         }
-        // stage('Helm Lint') {
-        //     steps {
-        //         sh 'helm lint path/to/your/chart'
-        //     }
-        // }
+        stage('Helm Lint') {
+            steps {
+                sh 'helm lint .'
+            }
+        }
 
-        // stage('Helm Template') {
-        //     steps {
-        //         sh 'helm template path/to/your/chart'
-        //     }
-        // }
+        stage('Helm Template') {
+            steps {
+                sh 'helm template .'
+            }
+        }
+
+        stage('release') {
+            steps {
+                script {
+                    // Define credentials for GitHub
+                    withCredentials([usernamePassword(credentialsId: 'GITHUB_CREDENTIALS_ID', usernameVariable: 'githubUsername', passwordVariable: 'githubToken')]) {
+                      withEnv(["GH_TOKEN=${githubToken}"]){
+                       sh """
+                            npx semantic-release
+                       """
+                      }     
+                    }
+                }
+            }
+        }
+
 
         // stage('Create Release') {
         //     steps {
@@ -46,24 +62,6 @@ ipeline {
         //     }
         // }
 
-        // stage('Create GitHub Release') {
-        //     steps {
-        //         script {
-        //             def chartName = sh(script: 'basename path/to/your/chart', returnStatus: true).trim()
-        //             def zipFileName = "${chartName}-${newVersion}.tgz"
-
-        //             // Create GitHub release using GitHub API
-        //             sh "github-release create myorg/myrepo ${newVersion} -t ${zipFileName}"
-        //         }
-        //     }
-        // }
-    }
-
-    // post {
-    //     always {
-    //         // Clean up or post-processing steps
-    //     }
-    // }
 
 
 }
