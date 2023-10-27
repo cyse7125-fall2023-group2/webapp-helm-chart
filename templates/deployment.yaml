@@ -22,7 +22,7 @@ spec:
         app: webapp
       spec:
         imagePullSecrets:
-          - name: secrets
+          - name: docker-regcred
         containers:
         - name: {{ .Values.primaryContainer.name }}
           image: {{ .Values.primaryContainer.repository }}:{{ .Values.primaryContainer.tag }}

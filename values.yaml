@@ -10,8 +10,8 @@ deployment:
 
 primaryContainer:
   name: csye7125-webapp
-  repository: sumanthksai/group-csye7125
-  tag: 1.3.0
+  repository: sumanthksai/webapp
+  tag: 1.4.0
   pullPolicy: IfNotPresent
   ports:
     containerPort: 4000
@@ -36,7 +36,7 @@ initContainer:
   enabled: true
   name: flyway-migrate
   image:
-    repository: sumanthksai/flyway
+    repository: sumanthksai/csye7125-flyway
     tag: latest
   volumeMounts:
     - name: flyway-config-volume
