@@ -75,3 +75,26 @@ env:
     value: "5432"
   - name: APP_PORT
     value: "4000"
+# env:
+#   DB_USERNAME: ""
+#   DB_PASSWORD: ""
+#   DB_NAME: ""
+#   DB_HOST: ""
+#   DB_PORT: ""
+#   APP_PORT: ""
+postgresql:
+    auth:
+      postgresPassword: "password"
+      username: "postgres"
+      password: "postgres"
+      database: "app"
+      # existingSecret: ""
+      # secretKeys:
+      #   adminPasswordKey: ""
+      #   userPasswordKey: ""
+      #   replicationPasswordKey: ""
+    ## @param global.postgresql.service.ports.postgresql PostgreSQL service port (overrides `service.ports.postgresql`)
+    ##
+    service:
+      ports:
+        postgresql: "5432"
