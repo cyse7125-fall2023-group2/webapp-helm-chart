@@ -1,4 +1,4 @@
-pipeline {
+ipeline {
     agent any
     stages {
         stage('Fetch GitHub Credentials') {
@@ -45,42 +45,23 @@ pipeline {
                 }
             }
         }
-        stage('post-release') {
-            steps {
-                script {
-                    // Define credentials for GitHub
-                    withCredentials([usernamePassword(credentialsId: 'GITHUB_CREDENTIALS_ID', usernameVariable: 'githubUsername', passwordVariable: 'githubToken')]) {
-                    version_id= sh(returnStdout: true, script: "git describe --abbrev=0 --tags | tr -d 'v' ").trim()
-                    // Update Chart.yaml with the new version
-                    sh "sed -i 's/^version: .*/version: ${version_id}/' ."
-
-                    // Package Helm chart
-                    sh "helm package . -d ."
-
-                }
-            }
-        }
-        }
 
 
-        // stage('Create GitHub Release') {
+        // stage('Create Release') {
         //     steps {
         //         script {
-        //             def chartName = sh(script: 'basename path/to/your/chart', returnStatus: true).trim()
-        //             def zipFileName = "${chartName}-${newVersion}.tgz"
+        //             // Use Semantic Release to determine the version
+        //             def newVersion = sh(script: 'semantic-release-command', returnStatus: true).trim()
 
-        //             // Create GitHub release using GitHub API
-        //             sh "github-release create myorg/myrepo ${newVersion} -t ${zipFileName}"
+        //             // Update Chart.yaml with the new version
+        //             sh "sed -i 's/^version: .*/version: ${newVersion}/' path/to/your/chart/Chart.yaml"
+
+        //             // Package Helm chart
+        //             sh "helm package path/to/your/chart -d ."
         //         }
         //     }
         // }
-    }
 
-    // post {
-    //     always {
-    //         // Clean up or post-processing steps
-    //     }
-    // }
 
 
 }

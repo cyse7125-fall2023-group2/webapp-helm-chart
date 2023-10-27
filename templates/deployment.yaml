@@ -31,11 +31,14 @@ spec:
                 secretKeyRef:
                   name: secrets
                   key: DB_PASSWORD
+            - name: DB_USERNAME
+              value: {{.Values.postgresql.auth.username}}
+            - name: DB_HOST
+              value: {{ .Release.Name }}-postgresql-0.{{ .Release.Name }}-postgresql-hl.{{ .Release.Namespace }}.svc.cluster.local
             {{- range .Values.env }}
             - name: {{ .name | quote }}
               value: {{ .value | quote  }}
             {{- end }}
-
           ports:
             - containerPort: {{ .Values.primaryContainer.ports.containerPort }}
           volumeMounts:
