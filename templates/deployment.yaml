@@ -21,6 +21,8 @@ spec:
        labels:
         app: webapp
       spec:
+        imagePullSecrets:
+          - name: secrets
         containers:
         - name: {{ .Values.primaryContainer.name }}
           image: {{ .Values.primaryContainer.repository }}:{{ .Values.primaryContainer.tag }}
