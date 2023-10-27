@@ -1,7 +1,7 @@
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: configs
+  name: {{ .Release.Name }}-configs
 data:
 {{- if .Values.configMap.enabled }}
   flyway.conf: |
