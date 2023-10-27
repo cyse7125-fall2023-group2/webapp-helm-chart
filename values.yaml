@@ -45,11 +45,11 @@ initContainer:
       mountPath: /flyway/db_password.txt
       subPath: db_password.txt
     
-volumes:
-  - name: flyway-config-volume
-    configMapName: configs
-  - name: secret-volume
-    secretName: secrets
+# volumes:
+#   - name: flyway-config-volume
+#     configMapName: configs
+#   - name: secret-volume
+#     secretName: secrets
 
 # ConfigMap settings
 configMap:

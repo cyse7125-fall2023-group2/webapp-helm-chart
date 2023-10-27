@@ -1,9 +1,9 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-   name: csye7125
+   name: {{ .Release.Name }}-csye7125
    labels:
-     app : webapp
+     app : {{ .Release.Name }}-webapp
 spec:
   replicas: {{ .Values.deployment.replicas }}
   strategy:
@@ -15,14 +15,14 @@ spec:
   progressDeadlineSeconds: {{ .Values.deployment.progressDeadlineSeconds }}
   selector:
     matchLabels:
-      app: webapp
+      app: {{ .Release.Name }}-webapp
   template:
       metadata:
        labels:
-        app: webapp
+        app: {{ .Release.Name }}-webapp
       spec:
         imagePullSecrets:
-          - name: docker-regcred
+          - name: {{ .Release.Name }}-docker-regcred
         containers:
         - name: {{ .Values.primaryContainer.name }}
           image: {{ .Values.primaryContainer.repository }}:{{ .Values.primaryContainer.tag }}
@@ -31,7 +31,7 @@ spec:
             - name: DB_PASSWORD
               valueFrom:
                 secretKeyRef:
-                  name: secrets
+                  name: {{ .Release.Name }}-secrets
                   key: DB_PASSWORD
             - name: DB_USERNAME
               value: {{.Values.postgresql.auth.username}}
@@ -78,14 +78,9 @@ spec:
             command: ["flyway","migrate", "-configFiles=/flyway/conf/flyway.conf" ,"-locations=filesystem:/flyway/sql" , "-connectRetries=60"] 
         {{- end }}
         volumes:
-        {{- range .Values.volumes }}
-          - name: {{ .name }}
-            {{- if .configMapName }}
-            configMap:
-              name: {{ .configMapName }}
-            {{- end }}
-            {{- if .secretName }}
-            secret:
-              secretName: {{ .secretName }}
-            {{- end }}
-        {{- end }}
+        - name: flyway-config-volume
+          configMap:
+            name: {{ .Release.Name }}-configs
+        - name: secret-volume
+          secret:
+            secretName: {{ .Release.Name }}-secrets
