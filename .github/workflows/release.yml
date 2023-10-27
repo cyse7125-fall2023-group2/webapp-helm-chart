@@ -24,5 +24,6 @@ jobs:
 
       - name: Test Helm Chart
         run: |
+          helm dependency build
           helm template .
         working-directory: ./
