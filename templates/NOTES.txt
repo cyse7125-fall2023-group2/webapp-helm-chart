@@ -19,5 +19,7 @@ StatefulSets:
 
 Please wait a few seconds until the webapp_chart is fully installed.
 
-and then entering the external IP address you get, into your web browser's address bar.
-http://EXTERNAL_IP:8080/api_endpoint
+NOTE: It may take a few minutes for the LoadBalancer IP to be available.
+           You can watch the status of by running 'kubectl get --namespace {{ .Release.Namespace }} svc {{ .Release.Name }}-webapp-service'
+  export SERVICE_IP=$(kubectl get --namespace {{ .Release.Namespace }} svc {{ .Release.Name }}-webapp-service --template "{{"{{ range (index .status.loadBalancer.ingress 0) }}{{.}}{{ end }}"}}")
+  curl http://$SERVICE_IP:8080/healthz
