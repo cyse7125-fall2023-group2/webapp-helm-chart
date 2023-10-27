@@ -5,7 +5,14 @@ metadata:
    labels:
      "app" : "webapp"
 spec:
-  replicas: 3
+  replicas: {{ .Values.deployment.replicas }}
+  strategy:
+    type: {{ .Values.deployment.strategy.type }}
+    rollingUpdate:
+      maxSurge: {{ .Values.deployment.strategy.rollingUpdate.maxSurge }}
+      maxUnavailable: {{ .Values.deployment.strategy.rollingUpdate.maxUnavailable }}
+  minReadySeconds: {{ .Values.deployment.minReadySeconds }}
+  progressDeadlineSeconds: {{ .Values.deployment.progressDeadlineSeconds }}
   selector:
     matchLabels:
       app: "webapp"
@@ -15,68 +22,57 @@ spec:
         app: webapp
       spec:
         containers:
-        - name: csye7125-webapp
-          image: sumanthksai/group-csye7125:1.3.0
+        - name: {{ .Values.primaryContainer.name }}
+          image: {{ .Values.primaryContainer.repository }}:{{ .Values.primaryContainer.tag }}
+          imagePullPolicy: {{ .Values.primaryContainer.pullPolicy }}
           env:
-            - name: DB_USERNAME
-              valueFrom:
-                secretKeyRef:
-                  name: secrets
-                  key: DB_USERNAME
             - name: DB_PASSWORD
               valueFrom:
                 secretKeyRef:
                   name: secrets
                   key: DB_PASSWORD
-            - name: DB_NAME
-              valueFrom:
-                configMapKeyRef:
-                  name: configs
-                  key: DB_NAME
-            - name: DB_HOST
-              valueFrom:
-                configMapKeyRef:
-                  name: configs
-                  key: DB_HOST
-            - name: DB_PORT
-              valueFrom:
-                configMapKeyRef:
-                  name: configs
-                  key: DB_PORT
-            - name: APP_PORT
-              valueFrom:
-                configMapKeyRef:
-                  name: configs
-                  key: APP_PORT
-          ports:
-          - containerPort: 4000
-          # readinessProbe:
-          #   httpGet:
-          #     path: /healthz  
-          #     port: 4000      
-          #   initialDelaySeconds: 5  
-          #   periodSeconds: 10       
-          # livenessProbe:
-          #   httpGet:
-          #     path: /healthz
-          #     port: 4000
-          #   initialDelaySeconds: 15
-          #   periodSeconds: 10
+            {{- range .Values.env }}
+            - name: {{ .name | quote }}
+              value: {{ .value | quote  }}
+            {{- end }}
 
+          ports:
+            - containerPort: {{ .Values.primaryContainer.ports.containerPort }}
+          readinessProbe:
+            httpGet:
+              path: {{ .Values.primaryContainer.readinessProbe.httpGet.path }}
+              port: {{ .Values.primaryContainer.ports.containerPort }}
+            initialDelaySeconds: {{ .Values.primaryContainer.readinessProbe.initialDelaySeconds }}
+            periodSeconds: {{ .Values.primaryContainer.readinessProbe.periodSeconds }}
+          livenessProbe:
+            httpGet:
+              path: {{ .Values.primaryContainer.livenessProbe.httpGet.path }}
+              port: {{ .Values.primaryContainer.ports.containerPort }}
+            initialDelaySeconds: {{ .Values.primaryContainer.livenessProbe.initialDelaySeconds }}
+            periodSeconds: {{ .Values.primaryContainer.livenessProbe.periodSeconds }}
         initContainers:
-        - name: flyway-migrate
-          image: sumanthksai/flyway:latest
-          volumeMounts:
-            - name: flyway-config-volume
-              mountPath: /flyway/conf
-            - name: secret-volume
-              mountPath: /flyway/db_password.txt
-              subPath: db_password.txt
-          command: ["flyway","migrate", "-configFiles=/flyway/conf/flyway.conf" ,"-locations=filesystem:/flyway/sql" , "-connectRetries=60"] 
+        {{- if .Values.initContainer.enabled }}
+          - name: {{ .Values.initContainer.name }}
+            image: {{ .Values.initContainer.image.repository }}:{{ .Values.initContainer.image.tag }}
+            volumeMounts:
+            {{- range .Values.initContainer.volumeMounts }}
+              - name: {{ .name }}
+                mountPath: {{ .mountPath }}
+                {{- if .subPath }}
+                subPath: {{ .subPath }}
+                {{- end }}
+            {{- end }}
+            command: ["flyway","migrate", "-configFiles=/flyway/conf/flyway.conf" ,"-locations=filesystem:/flyway/sql" , "-connectRetries=60"] 
+        {{- end }}
         volumes:
-        - name: flyway-config-volume
-          configMap:
-            name: configs
-        - name: secret-volume
-          secret:
-            secretName: secrets
+        {{- range .Values.volumes }}
+          - name: {{ .name }}
+            {{- if .configMapName }}
+            configMap:
+              name: {{ .configMapName }}
+            {{- end }}
+            {{- if .secretName }}
+            secret:
+              secretName: {{ .secretName }}
+            {{- end }}
+        {{- end }}

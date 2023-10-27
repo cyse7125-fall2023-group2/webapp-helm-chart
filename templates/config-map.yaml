@@ -3,12 +3,7 @@ kind: ConfigMap
 metadata:
   name: configs
 data:
-  DB_NAME: "app"
-  DB_HOST: "host.docker.internal"
-  DB_PORT: "5432"
-  APP_PORT: "4000"
+{{- if .Values.configMap.enabled }}
   flyway.conf: |
-    flyway.url=jdbc:postgresql://host.docker.internal:5432/app
-    flyway.user=postgres
-    flyway.password=/flyway/db_password.txt
-    flyway.baselineOnMigrate=false
+{{ .Values.configMap.data.flyway | nindent 4 }}
+{{- end }}
