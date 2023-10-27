@@ -3,7 +3,7 @@ name: Helm CI
 on:
   pull_request:
     branches:
-      - main
+      - main 
 
 jobs:
   lint-test:
@@ -19,9 +19,10 @@ jobs:
           version: 'latest'
 
       - name: Lint Helm Chart
-        run: helm lint .
+        run: helm lint
+        working-directory: ./
 
       - name: Test Helm Chart
         run: |
           helm template . | kubeval --strict --ignore-missing-schemas
-        
+        working-directory: ./
