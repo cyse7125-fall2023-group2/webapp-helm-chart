@@ -45,6 +45,8 @@ pipeline {
                 }
             }
         }
+}
+}
 
 
         // stage('Create Release') {
@@ -64,4 +66,3 @@ pipeline {
 
 
 
-}
