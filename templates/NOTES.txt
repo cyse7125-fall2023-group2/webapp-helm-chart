@@ -1,0 +1,25 @@
+Please wait a few seconds until the {{ .Chart.Name }} chart is fully installed.
+
+user@debian:~$ helm install chart_name webapp-helm-chart-github-version.tar.gz
+NAME: chart_Name
+LAST DEPLOYED: time
+NAMESPACE: default
+STATUS: deployed
+REVISION: 1
+TEST SUITE: None
+NOTES:
+
+After installation is complete, you can access your kubernetes resources by running this command:
+Webapp_pods:
+    kubectl get --namespace {{ .Release.Namespace }} pod {{ .Release.Name }}-webapp
+Services:
+    kubectl get --namespace {{ .Release.Namespace }} svc {{ .Release.Name }}-webapp-service
+StatefulSets:
+    kubectl get --namespace {{ .Release.Namespace }} pod {{ .Release.Name }}-postgres-0
+
+Please wait a few seconds until the webapp_chart is fully installed.
+
+NOTE: It may take a few minutes for the LoadBalancer IP to be available.
+           You can watch the status of by running 'kubectl get --namespace {{ .Release.Namespace }} svc {{ .Release.Name }}-webapp-service'
+  export SERVICE_IP=$(kubectl get --namespace {{ .Release.Namespace }} svc {{ .Release.Name }}-webapp-service --template "{{"{{ range (index .status.loadBalancer.ingress 0) }}{{.}}{{ end }}"}}")
+  curl http://$SERVICE_IP:8080/healthz
