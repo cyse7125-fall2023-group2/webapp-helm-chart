@@ -1,9 +1,5 @@
 # webapp-helm-chart
 
-Creating a README for a Helm chart that deploys a web server, uses Flyway migration, and sets up a Bitnami PostgreSQL database using ConfigMap and Secrets is essential for helping users understand how to install, configure, and operate the Helm chart. Below is a sample README for such a Helm chart:
-
-# Web Server with Flyway Migration and Bitnami PostgreSQL Helm Chart
-
 ## Overview
 
 This Helm chart deploys a web server and configures a Bitnami PostgreSQL database with Flyway migration for managing database schema updates. The chart uses Kubernetes ConfigMaps and Secrets to store configuration data and sensitive information securely.
