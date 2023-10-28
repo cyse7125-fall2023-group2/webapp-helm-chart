@@ -65,7 +65,9 @@ pipeline {
                     
                      withCredentials([usernamePassword(credentialsId: 'GITHUB_CREDENTIALS_ID', usernameVariable: 'githubUsername', passwordVariable: 'githubToken')]) {
                       withEnv(["GH_TOKEN=${githubToken}"]){
-                    def zipFileName = "csye7125-chart-${newVersion}.tgz"
+                    def chartYaml = readYaml(file: 'Chart.yaml')
+                    def chartName = chartYaml.name
+                    def zipFileName = "${chartName}-${newVersion}.tgz"
                     sh "ls"
                     def tagExists = sh(returnStatus: true, script: "gh release view ${newVersion} --repo cyse7125-fall2023-group2/webapp-helm-chart")
                     if (tagExists != 0) {
