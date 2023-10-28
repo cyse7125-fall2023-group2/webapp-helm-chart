@@ -45,24 +45,42 @@ pipeline {
                 }
             }
         }
+
+        stage('Create Release') {
+            steps {
+                script {
+                    // Use Semantic Release to determine the version
+                    newVersion = sh(returnStdout: true, script: "git describe --abbrev=0 --tags | tr -d 'v' ").trim()
+
+
+                    // Package Helm chart
+                    sh "helm package . --version ${newVersion}"
+                }
+            }
+        }
+
+        stage('Create GitHub Release') {
+            steps {
+                script {
+                    
+                     withCredentials([usernamePassword(credentialsId: 'GITHUB_CREDENTIALS_ID', usernameVariable: 'githubUsername', passwordVariable: 'githubToken')]) {
+                      withEnv(["GH_TOKEN=${githubToken}"]){
+                    def zipFileName = "csye7125-chart-${newVersion}.tgz"
+                    sh "ls"
+                    def tagExists = sh(returnStatus: true, script: "gh release view ${newVersion} --repo cyse7125-fall2023-group2/webapp-helm-chart")
+                    if (tagExists != 0) {
+                        sh "gh release create ${newVersion} ${zipFileName}  --title 'Release ${newVersion}' --notes 'Release notes for version ${newVersion}' --target main" 
+                    }
+                    
+                    // Create GitHub release using "gh" CLI
+                    
+                    }
+
+                     }
+            }
+        }
+        }
+
 }
+
 }
-
-
-        // stage('Create Release') {
-        //     steps {
-        //         script {
-        //             // Use Semantic Release to determine the version
-        //             def newVersion = sh(script: 'semantic-release-command', returnStatus: true).trim()
-
-        //             // Update Chart.yaml with the new version
-        //             sh "sed -i 's/^version: .*/version: ${newVersion}/' path/to/your/chart/Chart.yaml"
-
-        //             // Package Helm chart
-        //             sh "helm package path/to/your/chart -d ."
-        //         }
-        //     }
-        // }
-
-
-
