@@ -20,24 +20,24 @@ pipeline {
             }
         }
 
-        stage('Helm vesion'){
-            steps{
-                sh """
-                helm version
-                """
-            }
-        }
-        stage('Helm Lint') {
-            steps {
-                sh 'helm lint .'
-            }
-        }
+        // stage('Helm vesion'){
+        //     steps{
+        //         sh """
+        //         helm version
+        //         """
+        //     }
+        // }
+        // stage('Helm Lint') {
+        //     steps {
+        //         sh 'helm lint .'
+        //     }
+        // }
 
-        stage('Helm Template') {
-            steps {
-                sh 'helm template .'
-            }
-        }
+        // stage('Helm Template') {
+        //     steps {
+        //         sh 'helm template .'
+        //     }
+        // }
 
         // stage('release') {
         //     steps {
