@@ -1,5 +1,13 @@
 pipeline {
     agent any
+    environment {
+        GH_TOKEN  = credentials('GITHUB_CREDENTIALS_ID')
+        GOOGLE_APPLICATION_CREDENTIALS = credentials('webapp-operator')
+        PROJECT_ID = 'csye7125-cloud-003'
+        CLUSTER_NAME = 'csye7125-cloud-003-gke'
+        REGION = 'us-east1'
+
+    }
     stages {
         stage('Fetch GitHub Credentials') {
             steps {
@@ -81,6 +89,23 @@ pipeline {
                      }
             }
         }
+        }
+
+        stage('make deploy'){
+            steps{
+                script{
+                        withCredentials([file(credentialsId: 'webapp-operator', variable: 'SA_KEY')]) {
+    
+                      sh """
+                        gcloud auth activate-service-account --key-file=${GOOGLE_APPLICATION_CREDENTIALS}
+                        gcloud config set project ${PROJECT_ID}
+                        gcloud container clusters get-credentials csye7125-cloud-003-gke --region us-east1 --project csye7125-cloud-003
+                        helm install webapp-helm . --namespace=webappcr-system
+                         """
+                    }
+    
+                }
+            }
         }
 
 }
