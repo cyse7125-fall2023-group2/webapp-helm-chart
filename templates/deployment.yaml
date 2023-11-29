@@ -21,6 +21,7 @@ spec:
        labels:
         app: {{ .Release.Name }}-webapp
       spec:
+        serviceAccountName: webappcr-controller-manager
         imagePullSecrets:
           - name: {{ .Release.Name }}-docker-regcred
         containers:
