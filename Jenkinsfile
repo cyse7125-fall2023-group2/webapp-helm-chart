@@ -5,7 +5,6 @@ pipeline {
         GOOGLE_APPLICATION_CREDENTIALS = credentials('webapp-operator')
         PROJECT_ID = 'csye7125-cloud-003'
         CLUSTER_NAME = 'csye7125-cloud-003-gke'
-        REGION = 'us-east1'
         RELEASE_NAME = 'webapp-helm'
         NAMESPACE = 'webappcr-system'
     }
@@ -100,7 +99,7 @@ pipeline {
                       sh """
                         gcloud auth activate-service-account --key-file=${GOOGLE_APPLICATION_CREDENTIALS}
                         gcloud config set project ${PROJECT_ID}
-                        gcloud container clusters get-credentials csye7125-cloud-003-gke --region us-east1 --project csye7125-cloud-003
+                        gcloud container clusters get-credentials csye7125-cloud-003-gke --zone us-east1-b --project csye7125-cloud-003
                         def releaseExists = sh(script: "helm list -n ${NAMESPACE} | grep ${RELEASE_NAME} | wc -l", returnStatus: true).toInteger() > 0
                         if (releaseExists) {
                             helm uninstall webapp-helm . --namespace=webappcr-system
