@@ -105,6 +105,7 @@ pipeline {
                         gcloud container clusters get-credentials ${CLUSTER_NAME} --region ${REGION} --project ${PROJECT_ID}                    
                          """
 
+
                         if (!nsReleaseExists) {
                             sh "helm install webapp-namespace ./namespace-helm-chart"
                         }else {
