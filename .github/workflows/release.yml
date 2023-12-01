@@ -20,16 +20,9 @@ jobs:
 
       - name: Lint Helm Chart
         run: helm lint
-        working-directory: ./webapp-chart
-      - name: Lint Helm Chart
-        run: helm lint
-        working-directory: ./namespace-helm-chart
+        working-directory: ./
 
       - name: Test Helm Chart
         run: |
           helm template .
-        working-directory: ./namespace-helm-chart
-      - name: Test Helm Chart
-        run: |
-          helm template .
-        working-directory: ./webapp-chart
+        working-directory: ./
