@@ -6,7 +6,7 @@ metadata:
 spec:
   podSelector:
     matchLabels:
-      instance: webapp
+      instance: {{ .Release.Name }}
   policyTypes:
     - Ingress
   ingress:

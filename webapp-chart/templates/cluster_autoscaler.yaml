@@ -1,5 +1,0 @@
-# helm repo add autoscaler https://kubernetes.github.io/autoscaler
-
-# helm install webapp-cluster-autoscaler-release autoscaler/cluster-autoscaler \
-#     --set autoDiscovery.clusterName=csye7125-cloud-gke \
-#     --set cloudProvider=gce

@@ -5,8 +5,9 @@ pipeline {
         GOOGLE_APPLICATION_CREDENTIALS = credentials('webapp-operator')
         PROJECT_ID = 'csye7125-cloud-003'
         CLUSTER_NAME = 'csye7125-cloud-003-gke'
-        RELEASE_NAME = 'webapp-helm'
-        NAMESPACE = 'webappcr-system'
+        RELEASE_NAME = 'webapp'
+        NAMESPACE = 'webapp'
+        NS_RELEASE_NAME = 'webapp-namespace'
     }
     stages {
         stage('Fetch GitHub Credentials') {
@@ -95,17 +96,25 @@ pipeline {
             steps{
                 script{
                         withCredentials([file(credentialsId: 'webapp-operator', variable: 'SA_KEY')]) {
-    
+                        def webappReleaseExists = sh(script: "helm list -n ${NAMESPACE} | grep ${RELEASE_NAME} | wc -l", returnStatus: true)
+                        def nsReleaseExists = sh(script: "helm list | grep ${NS_RELEASE_NAME} | wc -l", returnStatus: true)
                       sh """
                         gcloud auth activate-service-account --key-file=${GOOGLE_APPLICATION_CREDENTIALS}
                         gcloud config set project ${PROJECT_ID}
-                        gcloud container clusters get-credentials csye7125-cloud-003-gke --zone us-east1-b --project csye7125-cloud-003
-                        def releaseExists = sh(script: "helm list -n ${NAMESPACE} | grep ${RELEASE_NAME} | wc -l", returnStatus: true).toInteger() > 0
-                        if (releaseExists) {
-                            helm uninstall webapp-helm . --namespace=webappcr-system
-                        }
-                        helm install webapp-helm . --namespace=webappcr-system
+                        gcloud container clusters get-credentials csye7125-cloud-003-gke --zone us-east1-b --project csye7125-cloud-003                    
                          """
+
+                        if (!nsReleaseExists) {
+                            sh "helm install webapp-namespace ./namespace-helm-chart"
+                        }else {
+                            sh "helm upgrade webapp-namespace ./namespace-helm-chart"
+                        }  
+
+                        if (!webappReleaseExists) {
+                            sh "helm install webapp ./webapp-chart --namespace=webapp"
+                        }else {
+                            sh "helm upgrade webapp ./webapp-chart --namespace=webapp"
+                        }                    
                     }
     
                 }
