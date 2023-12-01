@@ -1,7 +1,7 @@
 apiVersion: rbac.authorization.k8s.io/v1
 kind: Role
 metadata:
-  namespace: webapp
+  namespace: {{ .Values.namespace.name }}
   name: webapp-role
 rules:
  - apiGroups: [""]
