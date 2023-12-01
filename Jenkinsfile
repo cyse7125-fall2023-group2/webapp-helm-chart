@@ -8,6 +8,7 @@ pipeline {
         RELEASE_NAME = 'webapp'
         NAMESPACE = 'webapp'
         NS_RELEASE_NAME = 'webapp-namespace'
+        REGION = 'us-east1'
     }
     stages {
         stage('Fetch GitHub Credentials') {
@@ -101,7 +102,7 @@ pipeline {
                       sh """
                         gcloud auth activate-service-account --key-file=${GOOGLE_APPLICATION_CREDENTIALS}
                         gcloud config set project ${PROJECT_ID}
-                        gcloud container clusters get-credentials csye7125-cloud-003-gke --zone us-east1-b --project csye7125-cloud-003                    
+                        gcloud container clusters get-credentials ${CLUSTER_NAME} --region ${REGION} --project ${PROJECT_ID}                    
                          """
 
                         if (!nsReleaseExists) {
