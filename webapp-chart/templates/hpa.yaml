@@ -8,7 +8,6 @@ spec:
    apiVersion: apps/v1
    kind: Deployment
    name: {{ .Release.Name }}-csye7125
-   namespace: webappcr-system
   minReplicas: {{ .Values.deployment.replicas }}
   maxReplicas: {{ .Values.deployment.maxReplicas }}
   metrics:
