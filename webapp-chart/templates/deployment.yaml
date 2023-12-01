@@ -4,6 +4,7 @@ metadata:
    name: {{ .Release.Name }}-csye7125
    labels:
      app : {{ .Release.Name }}-webapp
+   namespace: {{ .Values.namespace.name }}
 spec:
   replicas: {{ .Values.deployment.replicas }}
   strategy:
@@ -38,6 +39,13 @@ spec:
         - name: {{ .Values.primaryContainer.name }}
           image: {{ .Values.primaryContainer.repository }}:{{ .Values.primaryContainer.tag }}
           imagePullPolicy: {{ .Values.primaryContainer.pullPolicy }}
+          resources:
+            requests:
+              memory: {{ .Values.deployment.resources.requests.memory }}
+              cpu: {{ .Values.deployment.resources.requests.cpu }}
+            limits:
+              memory: {{ .Values.deployment.resources.limits.memory }}
+              cpu: {{ .Values.deployment.resources.limits.cpu }}
           env:
             - name: DB_PASSWORD
               valueFrom:
@@ -78,6 +86,13 @@ spec:
         {{- if .Values.initContainer.enabled }}
           - name: {{ .Values.initContainer.name }}
             image: {{ .Values.initContainer.image.repository }}:{{ .Values.initContainer.image.tag }}
+            resources:
+              requests:
+                memory: {{ .Values.deployment.resources.requests.memory }}
+                cpu: {{ .Values.deployment.resources.requests.cpu }}
+              limits:
+                memory: {{ .Values.deployment.resources.limits.memory }}
+                cpu: {{ .Values.deployment.resources.limits.cpu }}
             volumeMounts:
             {{- range .Values.initContainer.volumeMounts }}
               - name: {{ .name }}

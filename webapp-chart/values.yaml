@@ -1,0 +1,96 @@
+deployment:
+  replicas: 3
+  maxReplicas: 5
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 0
+  resources:
+    requests: 
+      memory: "256Mi"
+      cpu: "500m"
+    limits:
+      memory: "512Mi"
+      cpu: "500m"
+  minReadySeconds: 30
+  progressDeadlineSeconds: 120
+  metrics:
+    averageUtilization: 5
+namespace:
+  name: webapp
+primaryContainer:
+  name: csye7125-webapp
+  repository: sumanthksai/webapp
+  tag: 1.10.0
+  pullPolicy: IfNotPresent
+  serviceAccountName: webapp-service-account
+  ports:
+    containerPort: 4000
+  readinessProbe:
+    httpGet:
+      path: /healthz
+      port: 4000
+    initialDelaySeconds: 5
+    periodSeconds: 10
+  livenessProbe:
+    httpGet:
+      path: /healthz
+      port: 4000
+    initialDelaySeconds: 10
+    periodSeconds: 20
+  volumeMounts:
+    - name: secret-volume
+      mountPath: /flyway/db_password.txt
+      subPath: db_password.txt
+
+initContainer:
+  enabled: true
+  name: flyway-migrate
+  image:
+    repository: sumanthksai/csye7125-flyway
+    tag: latest
+  volumeMounts:
+    - name: flyway-config-volume
+      mountPath: /flyway/conf
+    - name: secret-volume
+      mountPath: /flyway/db_password.txt
+      subPath: db_password.txt
+
+# ConfigMap settings
+configMap:
+  enabled: true
+  data:
+    flyway: |
+      
+      flyway.user=postgres
+      flyway.password=postgres
+      flyway.baselineOnMigrate=false
+
+# Secrets settings
+secrets:
+  enabled: true
+  data:
+    DB_PASSWORD: cG9zdGdyZXM=
+
+env:
+  # - name: DB_USERNAME
+  #   value: "postgres"
+  - name: DB_NAME
+    value: "app"
+  # - name: DB_HOST
+  #   value: "webapp-postgresql.default.svc.cluster.local"
+  - name: DB_PORT
+    value: "5432"
+  - name: APP_PORT
+    value: "4000"
+
+postgresql:
+    auth:
+      postgresPassword: "postgres"
+      username: "postgres"
+      password: "postgres"
+      database: "app"
+    service:
+      ports:
+        postgresql: "5432"

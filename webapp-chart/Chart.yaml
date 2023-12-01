@@ -1,12 +1,11 @@
 apiVersion: v2
-name: webapp-namespace-chart
+name: csye7125-chart
 description: A Helm chart for Kubernetes
 
-# dependencies:
-#   - name: postgresql
-#     version: 13.1.5
-#     repository: https://github.com/bitnami/charts/tree/main/bitnami/postgresql
-#     namespace: webapp
+dependencies:
+  - name: postgresql
+    version: 13.1.5
+    repository: https://github.com/bitnami/charts/tree/main/bitnami/postgresql
 
 type: application
 
