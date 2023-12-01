@@ -22,8 +22,9 @@ namespace:
 primaryContainer:
   name: csye7125-webapp
   repository: sumanthksai/webapp
-  tag: 1.4.0
+  tag: 1.10.0
   pullPolicy: IfNotPresent
+  serviceAccountName: webappcr-controller-manager
   ports:
     containerPort: 4000
   readinessProbe:

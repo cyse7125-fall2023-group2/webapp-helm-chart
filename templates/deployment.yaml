@@ -22,6 +22,17 @@ spec:
        labels:
         app: {{ .Release.Name }}-webapp
       spec:
+        affinity:
+          podAffinity:
+            requiredDuringSchedulingIgnoredDuringExecution:
+            - labelSelector:
+                matchExpressions:
+                - key: app
+                  operator: In
+                  values:
+                  - {{ .Release.Name }}-webapp
+              topologyKey: topology.kubernetes.io/zone
+        serviceAccountName: {{ .Values.primaryContainer.serviceAccountName }}
         imagePullSecrets:
           - name: {{ .Release.Name }}-docker-regcred
         containers:
