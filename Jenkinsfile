@@ -93,36 +93,6 @@ pipeline {
         }
         }
 
-        stage('make deploy'){
-            steps{
-                script{
-                        withCredentials([file(credentialsId: 'webapp-operator', variable: 'SA_KEY')]) {
-                        def webappReleaseExists = sh(script: "helm list -n ${NAMESPACE} | grep ${RELEASE_NAME} | wc -l", returnStatus: true)
-                        def nsReleaseExists = sh(script: "helm list | grep ${NS_RELEASE_NAME} | wc -l", returnStatus: true)
-                      sh """
-                        gcloud auth activate-service-account --key-file=${GOOGLE_APPLICATION_CREDENTIALS}
-                        gcloud config set project ${PROJECT_ID}
-                        gcloud container clusters get-credentials ${CLUSTER_NAME} --region ${REGION} --project ${PROJECT_ID}                    
-                         """
-
-
-                        if (!nsReleaseExists) {
-                            sh "helm install webapp-namespace ./namespace-helm-chart"
-                        }else {
-                            sh "helm upgrade webapp-namespace ./namespace-helm-chart"
-                        }  
-
-                        if (!webappReleaseExists) {
-                            sh "helm install webapp ./webapp-chart --namespace=webapp"
-                        }else {
-                            sh "helm upgrade webapp ./webapp-chart --namespace=webapp"
-                        }                    
-                    }
-    
-                }
-            }
-        }
-
     }
 
 
