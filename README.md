@@ -57,6 +57,6 @@ helm uninstall release-name
 ```
 
 - `my-release` should be the name of the release you specified during installation.
-testt
+testt-123
 
 
