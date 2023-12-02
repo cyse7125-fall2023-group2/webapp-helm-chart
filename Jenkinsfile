@@ -5,16 +5,32 @@ pipeline {
         GOOGLE_APPLICATION_CREDENTIALS = credentials('webapp-operator')
     }
     stages {
-        stage('Fetch GitHub Credentials') {
+        stage('Checkout Code') {
             steps {
                 script {
-                    // Define credentials for GitHub
-                    withCredentials([usernamePassword(credentialsId: 'GITHUB_CREDENTIALS_ID', usernameVariable: 'githubUsername', passwordVariable: 'githubToken')]) {
-                        git branch: 'main', credentialsId: 'GITHUB_CREDENTIALS_ID', url: 'https://github.com/cyse7125-fall2023-group2/webapp-helm-chart'        
-                    }
+                    // Checkout the 'main' branch explicitly
+                    checkout([$class: 'GitSCM', 
+                              branches: [[name: 'refs/heads/main']], 
+                              doGenerateSubmoduleConfigurations: false, 
+                              extensions: [], 
+                              submoduleCfg: [], 
+                              userRemoteConfigs: [[url: 'https://github.com/cyse7125-fall2023-group2/webapp-helm-chart', 
+                              credentialsId: 'GITHUB_CREDENTIALS_ID']]])
                 }
             }
         }
+
+        
+        // stage('Fetch GitHub Credentials') {
+        //     steps {
+        //         script {
+        //             // Define credentials for GitHub
+        //             withCredentials([usernamePassword(credentialsId: 'GITHUB_CREDENTIALS_ID', usernameVariable: 'githubUsername', passwordVariable: 'githubToken')]) {
+        //                 git branch: 'main', credentialsId: 'GITHUB_CREDENTIALS_ID', url: 'https://github.com/cyse7125-fall2023-group2/webapp-helm-chart'        
+        //             }
+        //         }
+        //     }
+        // }
 
         stage('Helm vesion'){
             steps{
