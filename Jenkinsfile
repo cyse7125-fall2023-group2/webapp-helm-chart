@@ -97,14 +97,8 @@ pipeline {
             }
         }
         }
-        post {
-        success {
-            // Trigger another pipeline(s) when the current pipeline succeeds
-            build job: 'webapp-helm-chart-deployment'
-        }
     }
 
     }
 
 
-}
