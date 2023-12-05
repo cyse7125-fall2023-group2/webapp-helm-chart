@@ -9,11 +9,11 @@ deployment:
       maxUnavailable: 0
   resources:
     requests: 
-      memory: "256Mi"
-      cpu: "500m"
+      memory: "64Mi"
+      cpu: "10m"
     limits:
-      memory: "512Mi"
-      cpu: "500m"
+      memory: "128Mi"
+      cpu: "2"
   minReadySeconds: 30
   progressDeadlineSeconds: 120
   metrics:

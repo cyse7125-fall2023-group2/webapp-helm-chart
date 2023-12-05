@@ -1,23 +1,15 @@
 apiVersion: v1
 kind: LimitRange
 metadata:
-  name: default-limits
-  namespace: webapp
+  name: cpu-resource-constraint
 spec:
   limits:
-  - type: Container
-    default:
-      memory: 512Mi
+  - default: # this section defines default limits
       cpu: 500m
-    defaultRequest:
-      memory: 256Mi
-      cpu: 50m
-    max:
-      memory: 1Gi
+    defaultRequest: # this section defines default requests
       cpu: 500m
+    max: # max and min define the limit range
+      cpu: "2"
     min:
-      memory: 64Mi
       cpu: 10m
-    maxLimitRequestRatio:
-      memory: 4
-      cpu: 10
+    type: Container

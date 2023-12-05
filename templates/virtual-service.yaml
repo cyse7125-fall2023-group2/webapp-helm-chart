@@ -1,0 +1,15 @@
+apiVersion: networking.istio.io/v1alpha3
+kind: VirtualService
+metadata:
+  name: webapp-virtual-service
+spec:
+  hosts:
+  - "*"
+  gateways:
+  - webapp-istio-gateway
+  http:
+   - route:
+      - destination:
+          host: webapp-service.webapp.svc.cluster.local
+          port:
+            number: 80
