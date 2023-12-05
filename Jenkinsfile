@@ -55,8 +55,6 @@ pipeline {
                 script {
                     // Use Semantic Release to determine the version
                     newVersion = sh(returnStdout: true, script: "git describe --abbrev=0 --tags | tr -d 'v' ").trim()
-
-
                     // Package Helm chart
                     sh "helm package . --version ${newVersion}"
                 }
@@ -67,7 +65,7 @@ pipeline {
             steps {
                 script {
                     
-                     withCredentials([usernamePassword(credentialsId: 'GITHUB_CREDENTIALS_ID', usernameVariable: 'githubUsername', passwordVariable: 'githubToken')]) {
+                    withCredentials([usernamePassword(credentialsId: 'GITHUB_CREDENTIALS_ID', usernameVariable: 'githubUsername', passwordVariable: 'githubToken')]) {
                       withEnv(["GH_TOKEN=${githubToken}"]){
                     def chartYaml = readYaml(file: 'Chart.yaml')
                     def chartName = chartYaml.name
@@ -77,15 +75,18 @@ pipeline {
                     if (tagExists != 0) {
                         sh "gh release create ${newVersion} ${zipFileName}  --title 'Release ${newVersion}' --notes 'Release notes for version ${newVersion}' --target main" 
                     }
-                    
-                    // Create GitHub release using "gh" CLI
-                    
+                    sh "rm ${zipFileName}"        
                     }
-
-                     }
+                }
             }
         }
         }
+        post {
+        success {
+            // Trigger another pipeline(s) when the current pipeline succeeds
+            build job: 'webapp-helm-chart-deployment'
+        }
+    }
 
     }
 

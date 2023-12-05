@@ -2,14 +2,15 @@ apiVersion: v1
 kind: Service
 metadata:
   labels:
-    app: {{ .Release.Name }}-webapp-service
-  name: {{ .Release.Name }}-webapp-service
+    app: {{ .Release.Name }}-service
+  name: {{ .Release.Name }}-service
   namespace: {{ .Values.namespace.name }}
 spec:
   selector:
     app: {{ .Release.Name }}-webapp
   ports:
-  - port: 8080
+  - name: http
+    port: 80
     protocol: TCP
     targetPort: 4000
-  type: LoadBalancer
+  # type: ClusterIP
