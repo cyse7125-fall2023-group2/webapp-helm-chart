@@ -38,20 +38,20 @@ pipeline {
             }
         }
 
-        stage('release') {
-            steps {
-                script {
-                    // Define credentials for GitHub
-                    withCredentials([usernamePassword(credentialsId: 'GITHUB_CREDENTIALS_ID', usernameVariable: 'githubUsername', passwordVariable: 'githubToken')]) {
-                      withEnv(["GH_TOKEN=${githubToken}"]){
-                       sh """
-                            npx semantic-release
-                       """
-                      }     
-                    }
-                }
-            }
-        }
+        // stage('release') {
+        //     steps {
+        //         script {
+        //             // Define credentials for GitHub
+        //             withCredentials([usernamePassword(credentialsId: 'GITHUB_CREDENTIALS_ID', usernameVariable: 'githubUsername', passwordVariable: 'githubToken')]) {
+        //               withEnv(["GH_TOKEN=${githubToken}"]){
+        //                sh """
+        //                     npx semantic-release
+        //                """
+        //               }     
+        //             }
+        //         }
+        //     }
+        // }
 
         stage('Create Release') {
             steps {
