@@ -1,5 +1,5 @@
 deployment:
-  replicas: 3
+  replicas: 1
   maxReplicas: 5
   minReplicas: 1
   strategy:
@@ -17,7 +17,7 @@ deployment:
   minReadySeconds: 30
   progressDeadlineSeconds: 120
   metrics:
-    averageUtilization: 5
+    averageUtilization: 50
 namespace:
   name: webapp
 primaryContainer:
