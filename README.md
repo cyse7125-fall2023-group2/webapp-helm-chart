@@ -11,6 +11,7 @@ This Helm chart deploys a web server and configures a Bitnami PostgreSQL databas
 - A Bitnami PostgreSQL container registry or a Docker image repository
 ### Helm Chart Configuration
 
+
 To deploy this Helm chart, you need to configure the following parameters: 
 
 - **webServer**:
