@@ -7,9 +7,9 @@ spec:
   - default: # this section defines default limits
       cpu: 2
     defaultRequest: # this section defines default requests
-      cpu: 500m
+      cpu: 2
     max: # max and min define the limit range
-      cpu: "2"
+      cpu: 3
     min:
-      cpu: 10m
+      cpu: 100m
     type: Container
