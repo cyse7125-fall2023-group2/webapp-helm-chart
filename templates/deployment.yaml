@@ -27,12 +27,12 @@ spec:
             preferredDuringSchedulingIgnoredDuringExecution:
             - weight: 1
               podAffinityTerm:
-               labelSelector:
-                 matchExpressions:
-                 - key: app
-                   operator: In
-                   values:
-                   - {{ .Release.Name }}-webapp
+                labelSelector:
+                  matchExpressions:
+                  - key: app
+                    operator: In
+                    values:
+                    - {{ .Release.Name }}-webapp
                 topologyKey: topology.kubernetes.io/zone
         serviceAccountName: {{ .Values.primaryContainer.serviceAccountName }}
         imagePullSecrets:
