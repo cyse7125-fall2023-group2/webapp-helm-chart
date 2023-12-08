@@ -95,3 +95,19 @@ postgresql:
     service:
       ports:
         postgresql: "5432"
+
+gateway:
+  name: "webapp-istio-gateway"
+  label: "ingress"
+  port: 80
+  protocol: HTTP
+  serverName: http
+
+virtualService:
+  name: "webapp-virtual-service"
+
+role:
+  name: "webapp-role"
+
+applicationPort:
+  value: 4000
