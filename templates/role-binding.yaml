@@ -1,7 +1,7 @@
 apiVersion: rbac.authorization.k8s.io/v1
 kind: RoleBinding
 metadata:
-  namespace: webappcr-system
+  namespace: {{ .Values.namespace.name }}
   name: webapp-role-binding
 subjects:
 - kind: ServiceAccount
