@@ -5,7 +5,7 @@ metadata:
 spec:
   limits:
   - default: # this section defines default limits
-      cpu: 500m
+      cpu: 2
     defaultRequest: # this section defines default requests
       cpu: 500m
     max: # max and min define the limit range
