@@ -2,7 +2,7 @@ apiVersion: rbac.authorization.k8s.io/v1
 kind: Role
 metadata:
   namespace: {{ .Values.namespace.name }}
-  name: webapp-role
+  name: {{ .Values.role.name }}
 rules:
  - apiGroups: [""]
    resources: ["configmaps", "secrets"]
