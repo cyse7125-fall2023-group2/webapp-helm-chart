@@ -23,7 +23,7 @@ spec:
         app: {{ .Release.Name }}-webapp
       spec:
         affinity:
-          podAffinity:
+          podAntiAffinity:
             requiredDuringSchedulingIgnoredDuringExecution:
             - labelSelector:
                 matchExpressions:
