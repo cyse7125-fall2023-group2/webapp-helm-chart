@@ -24,14 +24,16 @@ spec:
       spec:
         affinity:
           podAntiAffinity:
-            requiredDuringSchedulingIgnoredDuringExecution:
-            - labelSelector:
-                matchExpressions:
-                - key: app
-                  operator: In
-                  values:
-                  - {{ .Release.Name }}-webapp
-              topologyKey: topology.kubernetes.io/zone
+            preferredDuringSchedulingIgnoredDuringExecution:
+            - weight: 1
+              podAffinityTerm:
+                labelSelector:
+                  matchExpressions:
+                  - key: app
+                    operator: In
+                    values:
+                    - {{ .Release.Name }}-webapp
+                topologyKey: topology.kubernetes.io/zone
         serviceAccountName: {{ .Values.primaryContainer.serviceAccountName }}
         imagePullSecrets:
           - name: {{ .Release.Name }}-docker-regcred

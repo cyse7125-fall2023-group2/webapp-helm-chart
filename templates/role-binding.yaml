@@ -6,11 +6,8 @@ metadata:
 subjects:
 - kind: ServiceAccount
   name: webapp-service-account
+  namespace: {{ .Values.namespace.name }}
 roleRef:
   kind: Role
   name: webapp-role
   apiGroup: rbac.authorization.k8s.io
-# subjects:
-# - kind: ServiceAccount
-#   name: webappcr-controller-manager
-#   namespace: webappcr-system 
