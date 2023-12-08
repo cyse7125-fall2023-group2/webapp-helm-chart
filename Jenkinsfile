@@ -19,18 +19,6 @@ pipeline {
             }
         }
 
-        
-        // stage('Fetch GitHub Credentials') {
-        //     steps {
-        //         script {
-        //             // Define credentials for GitHub
-        //             withCredentials([usernamePassword(credentialsId: 'GITHUB_CREDENTIALS_ID', usernameVariable: 'githubUsername', passwordVariable: 'githubToken')]) {
-        //                 git branch: 'main', credentialsId: 'GITHUB_CREDENTIALS_ID', url: 'https://github.com/cyse7125-fall2023-group2/webapp-helm-chart'        
-        //             }
-        //         }
-        //     }
-        // }
-
         stage('Helm vesion'){
             steps{
                 sh """
