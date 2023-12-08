@@ -38,31 +38,45 @@ pipeline {
             }
         }
 
-        // stage('release') {
+        stage('release') {
+            steps {
+                script {
+                    // Define credentials for GitHub
+                    withCredentials([usernamePassword(credentialsId: 'GITHUB_CREDENTIALS_ID', usernameVariable: 'githubUsername', passwordVariable: 'githubToken')]) {
+                      withEnv(["GH_TOKEN=${githubToken}"]){
+                    //    sh """
+                    //         npx semantic-release --dry-run
+                    //    """
+                    //    release_output=$(sh"npx semantic-release --dry-run")
+                    //    def releaseOutput = sh(script: 'npx semantic-release --dry-run', returnStdout: true).trim()
+
+                    def releaseOutput = sh(script: 'npx semantic-release --dry-run', returnStdout: true).trim()
+
+                    // Extracting the version number from the output
+                    newVersion = releaseOutput.tokenize('\n').find { it.contains('The next release version is') }
+                    if (newVersion != null) {
+                        newVersion = newVersion.replaceAll(/.*The next release version is /, '').trim()
+                        sh "helm package . --version ${newVersion}"
+                    } else {
+                        echo "No new version detected"
+                    }
+                      }     
+                    }
+                }
+            }
+        }
+
+        // stage('Create Release') {
         //     steps {
         //         script {
-        //             // Define credentials for GitHub
-        //             withCredentials([usernamePassword(credentialsId: 'GITHUB_CREDENTIALS_ID', usernameVariable: 'githubUsername', passwordVariable: 'githubToken')]) {
-        //               withEnv(["GH_TOKEN=${githubToken}"]){
-        //                sh """
-        //                     npx semantic-release
-        //                """
-        //               }     
-        //             }
+        //             // Use Semantic Release to determine the version
+        //             newVersion = sh(returnStdout: true, script: "git describe --abbrev=0 --tags | tr -d 'v' ").trim()
+        //             // Package Helm chart
+        //             sh "helm package . --version ${newVersion}"
         //         }
         //     }
         // }
 
-        stage('Create Release') {
-            steps {
-                script {
-                    // Use Semantic Release to determine the version
-                    newVersion = sh(returnStdout: true, script: "git describe --abbrev=0 --tags | tr -d 'v' ").trim()
-                    // Package Helm chart
-                    sh "helm package . --version ${newVersion}"
-                }
-            }
-        }
         stage('Create GitHub Release') {
             steps {
                 script {
