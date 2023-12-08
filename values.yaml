@@ -17,7 +17,7 @@ deployment:
   minReadySeconds: 30
   progressDeadlineSeconds: 120
   metrics:
-    averageUtilization: 50
+    averageUtilization: 5
 namespace:
   name: webapp
 primaryContainer:
