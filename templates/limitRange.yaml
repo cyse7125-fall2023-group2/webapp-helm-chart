@@ -5,11 +5,15 @@ metadata:
 spec:
   limits:
   - default: # this section defines default limits
-      cpu: 2
-    defaultRequest: # this section defines default requests
-      cpu: 2
-    max: # max and min define the limit range
       cpu: 3
+      memory: 2Gi
+    defaultRequest: # this section defines default requests
+      cpu: 3
+      memory: 2Gi
+    max: # max and min define the limit range
+      cpu: 4
+      memory: 3Gi
     min:
       cpu: 100m
+      memory: 100Mi
     type: Container
