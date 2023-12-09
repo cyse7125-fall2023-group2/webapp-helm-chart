@@ -6,7 +6,7 @@ metadata:
 subjects:
 - kind: ServiceAccount
   name: {{ .Release.Name }}-service-account
-  namespace: webappcr-system
+  namespace: webapp
 roleRef:
   kind: Role
   name: {{ .Values.role.name }}
