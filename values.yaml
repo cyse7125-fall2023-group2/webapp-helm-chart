@@ -1,7 +1,7 @@
 deployment:
-  replicas: 3
+  replicas: 4
   maxReplicas: 5
-  minReplicas: 1
+  minReplicas: 2
   strategy:
     type: RollingUpdate
     rollingUpdate:
