@@ -51,7 +51,7 @@ pipeline {
                     //    def releaseOutput = sh(script: 'npx semantic-release --dry-run', returnStdout: true).trim()
 
                     def releaseOutput = sh(script: 'npx semantic-release --dry-run', returnStdout: true).trim()
-
+                    sh "echo ${releaseOutput}"
                     // Extracting the version number from the output
                     newVersion = releaseOutput.tokenize('\n').find { it.contains('The next release version is') }
                     if (newVersion != null) {
