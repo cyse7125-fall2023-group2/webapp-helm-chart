@@ -45,21 +45,26 @@ pipeline {
                     withCredentials([usernamePassword(credentialsId: 'GITHUB_CREDENTIALS_ID', usernameVariable: 'githubUsername', passwordVariable: 'githubToken')]) {
                       withEnv(["GH_TOKEN=${githubToken}"]){
                     //    sh """
-                    //         npx semantic-release --dry-run
+                    //         npx semantic-release
                     //    """
-                    //    release_output=$(sh"npx semantic-release --dry-run")
-                    //    def releaseOutput = sh(script: 'npx semantic-release --dry-run', returnStdout: true).trim()
+                    
+                    // def releaseOutput = sh(script: 'npx semantic-release --dry-run', returnStdout: true).trim()
+                    // sh "echo ${releaseOutput}"
+                    // // Extracting the version number from the output
+                    // newVersion = releaseOutput.tokenize('\n').find { it.contains('The next release version is') }
+                    // if (newVersion != null) {
+                    //     newVersion = newVersion.replaceAll(/.*The next release version is /, '').trim()
+                    //     sh "helm package . --version ${newVersion}"
+                    // } else {
+                    //     echo "No new version detected"
+                    // }
 
-                    def releaseOutput = sh(script: 'npx semantic-release --dry-run', returnStdout: true).trim()
-                    sh "echo ${releaseOutput}"
-                    // Extracting the version number from the output
-                    newVersion = releaseOutput.tokenize('\n').find { it.contains('The next release version is') }
-                    if (newVersion != null) {
-                        newVersion = newVersion.replaceAll(/.*The next release version is /, '').trim()
-                        sh "helm package . --version ${newVersion}"
-                    } else {
-                        echo "No new version detected"
-                    }
+                              def releaseOutput = sh(script: 'npx semantic-release --dry-run', returnStdout: true).trim()
+
+          // Extract the new version from the output (assuming it's in a JSON format)
+          def newVersion = readJSON text: releaseOutput
+
+          echo "New version: ${newVersion.version}"
                       }     
                     }
                 }
