@@ -47,17 +47,6 @@ pipeline {
                        sh """
                             npx semantic-release
                        """
-                    
-                    // def releaseOutput = sh(script: 'npx semantic-release --dry-run', returnStdout: true).trim()
-                    // sh "echo ${releaseOutput}"
-                    // // Extracting the version number from the output
-                    // newVersion = releaseOutput.tokenize('\n').find { it.contains('The next release version is') }
-                    // if (newVersion != null) {
-                    //     newVersion = newVersion.replaceAll(/.*The next release version is /, '').trim()
-                    //     sh "helm package . --version ${newVersion}"
-                    // } else {
-                    //     echo "No new version detected"
-                    // }
                       }     
                     }
                 }
