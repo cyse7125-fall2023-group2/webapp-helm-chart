@@ -13,7 +13,6 @@ This Helm chart deploys a web server and configures a Bitnami PostgreSQL databas
 
 To deploy this Helm chart, you need to configure the following parameters: 
 
-
 - **webServer**:
   - `enabled`: Set to `true` to deploy the web server.
   - `image.repository`: The Docker image repository for the web server.
