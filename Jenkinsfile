@@ -44,9 +44,9 @@ pipeline {
                     // Define credentials for GitHub
                     withCredentials([usernamePassword(credentialsId: 'GITHUB_CREDENTIALS_ID', usernameVariable: 'githubUsername', passwordVariable: 'githubToken')]) {
                       withEnv(["GH_TOKEN=${githubToken}"]){
-                    //    sh """
-                    //         npx semantic-release
-                    //    """
+                       sh """
+                            npx semantic-release
+                       """
                     
                     // def releaseOutput = sh(script: 'npx semantic-release --dry-run', returnStdout: true).trim()
                     // sh "echo ${releaseOutput}"
@@ -58,29 +58,22 @@ pipeline {
                     // } else {
                     //     echo "No new version detected"
                     // }
-
-                              def releaseOutput = sh(script: 'npx semantic-release --dry-run', returnStdout: true).trim()
-
-          // Extract the new version from the output (assuming it's in a JSON format)
-          def newVersion = readJSON text: releaseOutput
-
-          echo "New version: ${newVersion.version}"
                       }     
                     }
                 }
             }
         }
 
-        // stage('Create Release') {
-        //     steps {
-        //         script {
-        //             // Use Semantic Release to determine the version
-        //             newVersion = sh(returnStdout: true, script: "git describe --abbrev=0 --tags | tr -d 'v' ").trim()
-        //             // Package Helm chart
-        //             sh "helm package . --version ${newVersion}"
-        //         }
-        //     }
-        // }
+        stage('Create Release') {
+            steps {
+                script {
+                    // Use Semantic Release to determine the version
+                    newVersion = sh(returnStdout: true, script: "git describe --abbrev=0 --tags | tr -d 'v' ").trim()
+                    // Package Helm chart
+                    sh "helm package . --version ${newVersion}"
+                }
+            }
+        }
 
         stage('Create GitHub Release') {
             steps {
